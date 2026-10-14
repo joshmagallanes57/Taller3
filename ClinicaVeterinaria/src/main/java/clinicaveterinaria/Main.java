@@ -1,30 +1,20 @@
 package clinicaveterinaria;
 
 import clinicaveterinaria.model.*;
-import clinicaveterinaria.repository.*;
-import clinicaveterinaria.service.*;
+import clinicaveterinaria.interfaces.*;
 
-
-import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
-        BaseDatos baseDatos = new BaseDatos();
-        MascotaService mascotaService = new MascotaService(baseDatos);
-        VeterinarioCrudService veterinarioCrudService = new VeterinarioCrudService(baseDatos);
-        ReservaService reservaService = new ReservaService(baseDatos);
-        DiagnosticoService diagnosticoService = new DiagnosticoService();
-        FacturacionService facturacionService = new FacturacionService(baseDatos);
-        TratamientoService tratamientoService = new TratamientoService(baseDatos);
-        ReporteService reporteService = new ReporteService(baseDatos);
+        Perro Spike = new Perro(10, "Spike");
+        Pez Dori = new Pez(11, "Dori");
+        Pajaro Zazu = new Pajaro(12, "Zazu");
 
-        Mascota mascota = new Mascota(1, "Luna", TipoAnimal.PERRO, 4, "Ana Perez");
-        Veterinario veterinario = new Veterinario(1, "Dr. Ruiz", "Medicina general", true);
-        Tratamiento tratamiento = new Tratamiento(1, TipoTratamiento.CIRUGIA, "Esterilizacion", 120.0);
+        Spike.caminar();
+        Spike.comer();
 
-        mascotaService.crearMascota(mascota);
-        veterinarioCrudService.crearVeterinario(veterinario);
-        tratamientoService.crearTratamiento(tratamiento);
+        Dori.comer();
+        Dori.nadar();
 
         Cita cita = reservaService.reservarCita(1, mascota, veterinario, LocalDate.now());
         diagnosticoService.diagnosticar(cita, "Paciente estable para tratamiento.");
