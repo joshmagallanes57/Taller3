@@ -277,12 +277,33 @@ Checklist de validación:
 
 | Criterio | Sí/No |
 | --- | --- |
-| El proyecto compila | |
-| `RecepcionService` no implementa métodos innecesarios | |
-| `Clinica` no usa `new` para dependencias principales | |
-| Las dependencias se reciben por constructor | |
+| El proyecto compila | Si|
+| `RecepcionService` no implementa métodos innecesarios |No|
+| `Clinica` no usa `new` para dependencias principales | Si|
+| Las dependencias se reciben por constructor |No |
 
 Preguntas de discusión:
+
+1. Problema de una interfaz gigante en equipos grandes
+
+Una interfaz gigante (también conocida como Fat Interface) viola el Principio de Segregación de Interfaces (ISP). En equipos grandes, esto causa dos problemas principales:
+
+Acoplamiento innecesario: Obliga a las clases que la implementan a programar métodos que no necesitan, llenando el código de excepciones o bloques vacíos.
+
+Conflictos de desarrollo (Merge Conflicts): Como muchos desarrolladores modifican la misma interfaz gigante para añadir funciones de distintos módulos, se generan constantes conflictos al fusionar el código, ralentizando el trabajo del equipo.
+
+2. Por qué new DirectoBaseDatos() dificulta cambiar o probar
+
+Escribir new DirectoBaseDatos() dentro de otra clase crea un acoplamiento fuerte (hardcoding de dependencias). Esto dificulta el diseño por lo siguiente:
+
+Impide las pruebas unitarias: No puedes aislar la clase que estás probando. Al ejecutar el test, el código intentará conectarse obligatoriamente a la base de datos real, lo que hace que las pruebas sean lentas, dependan de la red y puedan alterar datos reales.
+
+Rigidez al cambiar: Si el día de mañana decides cambiar la base de datos por un servicio en la nube (ej. DirectoCloud), tendrás que buscar y modificar manualmente cada línea de código donde pusiste el new. La solución correcta es usar Inyección de Dependencias.
+
+3. Qué dependencia debe conocer el código de alto nivel
+
+El código de alto nivel siempre debe conocer la interfaz (la abstracción) y nunca la clase concreta (la implementación).
+Esto responde al Principio de Inversión de Dependencias (DIP). Al depender de una interfaz, el módulo de alto nivel se vuelve inmune a los cambios internos de cómo funcionan los detalles de bajo nivel.
 
 - ¿Qué problema causa una interfaz gigante en equipos grandes?
 - ¿Por qué `new DirectoBaseDatos()` dificulta cambiar o probar la clase?
