@@ -49,4 +49,7 @@ public class ReporteService {
         }
         return total;
     }
+
+    
+
 }
