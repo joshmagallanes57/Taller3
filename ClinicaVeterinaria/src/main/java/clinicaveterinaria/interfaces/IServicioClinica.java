@@ -8,7 +8,6 @@ import clinicaveterinaria.model.Veterinario;
 
 import java.util.List;
 
-
 public interface IServicioClinica {
     void crearMascota(Mascota mascota);
 
