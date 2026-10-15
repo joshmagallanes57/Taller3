@@ -1,30 +1,20 @@
 package clinicaveterinaria;
 
 import clinicaveterinaria.model.*;
-import clinicaveterinaria.repository.*;
-import clinicaveterinaria.service.*;
+import clinicaveterinaria.interfaces.*;
 
-
-import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
-        BaseDatos baseDatos = new BaseDatos();
-        MascotaService mascotaService = new MascotaService(baseDatos);
-        VeterinarioCrudService veterinarioCrudService = new VeterinarioCrudService(baseDatos);
-        ReservaService reservaService = new ReservaService(baseDatos);
-        DiagnosticoService diagnosticoService = new DiagnosticoService();
-        FacturacionService facturacionService = new FacturacionService(baseDatos);
-        TratamientoService tratamientoService = new TratamientoService(baseDatos);
-        ReporteService reporteService = new ReporteService(baseDatos);
+        Perro Spike = new Perro(10, "Spike");
+        Pez Dori = new Pez(11, "Dori");
+        Pajaro Zazu = new Pajaro(12, "Zazu");
 
-        Mascota mascota = new Mascota(1, "Luna", TipoAnimal.PERRO, 4, "Ana Perez");
-        Veterinario veterinario = new Veterinario(1, "Dr. Ruiz", "Medicina general", true);
-        Tratamiento tratamiento = new Tratamiento(1, TipoTratamiento.CIRUGIA, "Esterilizacion", 120.0);
+        Spike.caminar();
+        Spike.comer();
 
-        mascotaService.crearMascota(mascota);
-        veterinarioCrudService.crearVeterinario(veterinario);
-        tratamientoService.crearTratamiento(tratamiento);
+        Dori.comer();
+        Dori.nadar();
 
         Cita cita = reservaService.reservarCita(1, mascota, veterinario, LocalDate.now());
         diagnosticoService.diagnosticar(cita, "Paciente estable para tratamiento.");
@@ -41,15 +31,16 @@ public class Main {
         System.out.println("Mascotas de Ana Perez: " + reporteService.generarReporteMascotasPorDueno("Ana Perez").size());
         System.out.println("Ingresos del mes: " + reporteService.calcularIngresosMensual());
 
-        demostrarViolacionesSinRomperEjecucion(veterinario, mascota, tratamiento);
+        demostrarViolacionesSinRomperEjecucion(veterinario, mascota, tratamiento, reservaService, diagnosticoService, null, reporteService);
         new Clinica().agendarConsultaRapida(mascota, veterinario);
         new ServicioClinicaCompleto(baseDatos).calcularTratamiento(tratamiento);
     }
 
-    private static void demostrarViolacionesSinRomperEjecucion(Veterinario veterinario, Mascota mascota, Tratamiento tratamiento) {
-        Cita citaDesdeModelo = veterinario.reservarCita(2, mascota, LocalDate.now().plusDays(1));
-        veterinario.diagnosticar(citaDesdeModelo, "Ejemplo de SRP violado desde el modelo.");
-        System.out.println(veterinario.crearReporte(citaDesdeModelo));
+    private static void demostrarViolacionesSinRomperEjecucion(Veterinario veterinario, Mascota mascota, Tratamiento tratamiento, ReservaService reservaService
+                                                                ,DiagnosticoService diagnosticoService, FacturaService facturaService, ReporteService reporteService ){
+        Cita citaDesdeServicio = reservaService.reservarCita(2, mascota, veterinario, LocalDate.now().plusDays(1));
+        diagnosticoService.diagnosticar(citaDesdeServicio, "Ejemplo de SRP violado desde el modelo.");
+        System.out.println( "Reporte de citas del veterinario: " + reporteService.generarReporteCitasPorVeterinario(veterinario.getId()));
 
         Animal pez = new Pez(3, "Nemo");
         pez.nadar();
