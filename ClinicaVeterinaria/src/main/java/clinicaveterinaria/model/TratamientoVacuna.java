@@ -1,3 +1,7 @@
+package clinicaveterinaria.model;
+
+import clinicaveterinaria.interfaces.ITratamiento;
+
 public class TratamientoVacuna implements ITratamiento {
     private final double costo;
 
@@ -13,5 +17,9 @@ public class TratamientoVacuna implements ITratamiento {
     @Override
     public String obtenerIndicaciones() {
         return "Observar fiebre durante 24 horas.";
+    }
+    @Override
+    public String prepararSala() {
+        return "Preparar refrigeracion y jeringas.";
     }
 }

@@ -1,45 +1,31 @@
 package clinicaveterinaria.model;
 
 import java.util.Objects;
-
+import clinicaveterinaria.interfaces.ITratamiento;
 
 public class Tratamiento {
     private int id;
     private TipoTratamiento tipo;
     private String descripcion;
     private double costo;
+    private ITratamiento tratamiento;
 
-    public Tratamiento(int id, TipoTratamiento tipo, String descripcion, double costo) {
+    public Tratamiento(int id, TipoTratamiento tipo,
+                       String descripcion, double costo,
+                       ITratamiento tratamiento) {
         this.id = id;
         this.tipo = tipo;
         this.descripcion = descripcion;
         this.costo = costo;
+        this.tratamiento = tratamiento;
     }
 
     public double calcularCostoFinal() {
-        if (tipo == TipoTratamiento.VACUNA) {
-            return costo + 5.0;
-        } else if (tipo == TipoTratamiento.CIRUGIA) {
-            return costo * 1.25 + 80.0;
-        } else if (tipo == TipoTratamiento.MEDICAMENTO) {
-            return costo * 1.10;
-        } else if (tipo == TipoTratamiento.FISIOTERAPIA) {
-            return costo * 0.95;
-        }
-        return costo;
+        return tratamiento.calcularCostoFinal();
     }
 
     public String obtenerIndicaciones() {
-        if (tipo == TipoTratamiento.VACUNA) {
-            return "Observar fiebre durante 24 horas.";
-        } else if (tipo == TipoTratamiento.CIRUGIA) {
-            return "Ayuno previo y control postoperatorio.";
-        } else if (tipo == TipoTratamiento.MEDICAMENTO) {
-            return "Administrar segun receta.";
-        } else if (tipo == TipoTratamiento.FISIOTERAPIA) {
-            return "Repetir sesiones dos veces por semana.";
-        }
-        return "Sin indicaciones.";
+        return tratamiento.obtenerIndicaciones();
     }
 
     public int getId() {
@@ -74,14 +60,18 @@ public class Tratamiento {
         this.costo = costo;
     }
 
+    public ITratamiento getTratamiento() {
+        return tratamiento;
+    }
+
+    public void setTratamiento(ITratamiento tratamiento) {
+        this.tratamiento = tratamiento;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Tratamiento)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof Tratamiento)) return false;
         Tratamiento that = (Tratamiento) o;
         return id == that.id;
     }

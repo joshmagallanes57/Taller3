@@ -1,13 +1,12 @@
 package clinicaveterinaria.service;
 
-import clinicaveterinaria.model.TipoTratamiento;
 import clinicaveterinaria.model.Tratamiento;
 import clinicaveterinaria.repository.BaseDatos;
 
 import java.util.List;
 
-
 public class TratamientoService {
+
     private final BaseDatos baseDatos;
 
     public TratamientoService(BaseDatos baseDatos) {
@@ -25,6 +24,7 @@ public class TratamientoService {
                 return tratamiento;
             }
         }
+
         return null;
     }
 
@@ -34,22 +34,15 @@ public class TratamientoService {
     }
 
     public void eliminarTratamiento(int id) {
-        baseDatos.getTratamientos().removeIf(tratamiento -> tratamiento.getId() == id);
+        baseDatos.getTratamientos()
+                .removeIf(tratamiento -> tratamiento.getId() == id);
+
         baseDatos.registrarOperacion("eliminarTratamiento");
     }
 
-    public String prepararSala(Tratamiento tratamiento) {
-        if (tratamiento.getTipo() == TipoTratamiento.VACUNA) {
-            return "Preparar refrigeracion y jeringas.";
-        } else if (tratamiento.getTipo() == TipoTratamiento.CIRUGIA) {
-            return "Preparar quirofano y anestesia.";
-        } else if (tratamiento.getTipo() == TipoTratamiento.MEDICAMENTO) {
-            return "Preparar receta y dosis.";
-        } else if (tratamiento.getTipo() == TipoTratamiento.FISIOTERAPIA) {
-            return "Preparar camilla y bandas elasticas.";
-        }
-        return "Sin preparacion.";
-    }
+  public String prepararSala(Tratamiento tratamiento) {
+    return tratamiento.getTratamiento().prepararSala();
+}
 
     public List<Tratamiento> listarTratamientos() {
         return baseDatos.getTratamientos();
